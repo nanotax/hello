@@ -1,0 +1,31 @@
+version: 0.2
+env:
+  variables:
+    JAVA_HOME: "/usr/lib/jvm/java-8-openjdk-amd64"
+phases:
+  install:
+    runtime-versions:
+      java: openjdk8
+  pre_build:
+    commands:
+    - echo Logging in to Amazon ECR...
+    - $(aws ecr get-login --no-include-email --region $AWS_REGION)
+  build:
+    commands:
+    - echo Building Source
+    - gradle clean
+    - gradle build
+    - echo Packaging Docker containers
+    - ./buildDockerImage.sh
+    finally:
+    - echo Finished
+  post_build:
+    commands:
+    - docker tag hello:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$serviceName:latest
+    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$serviceName:latest
+    finally:
+    - echo Finished
+cache:
+  paths:
+  - '/root/.m2/**/*'
+
