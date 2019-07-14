@@ -21,8 +21,8 @@ phases:
     - echo Finished
   post_build:
     commands:
-    - docker tag hello:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$serviceName:latest
-    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$serviceName:latest
+    - docker tag hello:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/hello:latest
+    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/hello:latest
     finally:
     - echo Finished
 cache:
